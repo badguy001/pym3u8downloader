@@ -357,24 +357,21 @@ class M3U8Downloader:
         os.makedirs(self._temp_directory_path, exist_ok=True)
         self._temp_directories.append(self._temp_directory)
 
-    def _download_and_write(self, sequence: int, url: str, files: TextIO) -> None:
+    def _download_and_write(self, file_name: str, url: str) -> None:
         """
         Downloads and writes a video file to disk.
 
-        :param sequence: The sequence number of the video file.
-        :type sequence: int
+        :param file_name: The file name of the video file.
+        :type file_name: str
         :param url: The URL of the video file.
         :type url: str
-        :param files: The file object for writing playlist files.
-        :type files: TextIO
         """
         import requests
 
-        validate_type(sequence, int, 'sequence should be an integer.')
+        validate_type(file_name, str, 'file_name should be an integer.')
         validate_type(url, str, 'url should be a string.')
 
         try:
-            file_name = f'file{sequence}.mp4'
             files.write(f'file {file_name}\n')
             file_path = os.path.join(self._temp_directory_path, file_name)
             self._debug_logger.debug(f'Download File Path: {file_path}') if self._debug else None
@@ -396,7 +393,9 @@ class M3U8Downloader:
             with ThreadPoolExecutor(max_workers=self._max_threads) as executor:
                 futures = []
                 for counter, url in enumerate(self._playlist_files, start=1):
-                    future = executor.submit(self._download_and_write, counter, url, files)
+                    file_name = f'file{counter}.mp4'
+                    files.write(f'file {file_name}\n')
+                    future = executor.submit(self._download_and_write, file_name, url)
                     futures.append(future)
 
                 while True:
