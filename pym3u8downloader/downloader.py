@@ -372,7 +372,6 @@ class M3U8Downloader:
         validate_type(url, str, 'url should be a string.')
 
         try:
-            files.write(f'file {file_name}\n')
             file_path = os.path.join(self._temp_directory_path, file_name)
             self._debug_logger.debug(f'Download File Path: {file_path}') if self._debug else None
             UtilityClass.download_file(url, file_path, self._verify_ssl)
