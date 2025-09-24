@@ -305,7 +305,7 @@ class M3U8Downloader:
 
                     self._debug_logger.debug(f'Merged {file_path}') if self._debug else None
 
-                    time.sleep(0.1)
+                    
 
                 sys.stdout.write("\n")
 
